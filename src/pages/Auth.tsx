@@ -3,7 +3,8 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import Input from '../components/ui/Input';
 import Button from '../components/ui/Button';
 import { useAuth } from '../contexts/AuthContext';
-import { useLang } from '../contexts/LangContext';
+
+const t = (s: string) => s; // Simple translation passthrough for French only
 
 const Auth: React.FC = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -11,9 +12,8 @@ const Auth: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
-  const { login, register } = useAuth();
-  const { lang, t } = useLang();
-  const isRtl = lang === 'fr';
+  const { connexion, inscription } = useAuth();
+  const isRtl = false; // French is LTR
 
   // Get redirect path from location state or default to homepage
   const from = location.state?.from?.pathname || '/';
@@ -76,17 +76,17 @@ const Auth: React.FC = () => {
       let success = false;
 
       if (isLogin) {
-        success = await login(formData.email, formData.password);
+        success = await connexion(formData.email, formData.password);
         if (!success) {
           setError(t('Email ou mot de passe invalide'));
         }
       } else {
-        success = await register({
-          name: formData.name,
+        success = await inscription({
+          nom: formData.name,
           email: formData.email,
-          phone: formData.phone,
+          telephone: formData.phone,
           age: Number(formData.age),
-          password: formData.password,
+          motDePasse: formData.password,
         });
         if (!success) {
           setError(t('Échec de la création du compte'));

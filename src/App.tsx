@@ -8,11 +8,8 @@ import MapPage from './pages/MapPage';
 import ContactPage from './pages/ContactPage';
 import NotFoundPage from './pages/NotFoundPage';
 import { AuthProvider } from './contexts/AuthContext';
-import { LangProvider, useLang } from './contexts/LangContext';
 
 const AppContent: React.FC = () => {
-  useLang();
-
   return (
     <Router>
       <div className="flex flex-col min-h-screen">
@@ -34,11 +31,9 @@ const AppContent: React.FC = () => {
 
 const App: React.FC = () => {
   return (
-    <LangProvider>
-      <AuthProvider>
-        <AppContent />
-      </AuthProvider>
-    </LangProvider>
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   );
 };
 

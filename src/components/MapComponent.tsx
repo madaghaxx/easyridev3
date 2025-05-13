@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 interface MapComponentProps {
-  lang: 'en' | 'fr';
+  lang: string;
 }
 
 const MapComponent: React.FC<MapComponentProps> = ({ lang }) => {
@@ -72,7 +72,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ lang }) => {
               
               L.marker(userCoords, { icon: userIcon })
                 .addTo(mapInstance)
-                .bindPopup('Your Location');
+                .bindPopup('Votre position');
               
               // Calculate distance
               const calculatedDistance = mapInstance.distance(userCoords, defaultLocation) / 1000;
@@ -87,7 +87,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ lang }) => {
             },
             () => {
               // Error getting location, just use default view
-              console.log('Unable to retrieve your location');
+              console.log('Impossible de récupérer votre position');
             }
           );
         }
@@ -105,15 +105,15 @@ const MapComponent: React.FC<MapComponentProps> = ({ lang }) => {
         map.remove();
       }
     };
-  }, []);
+  }, [map]);
 
   return (
-    <div className="w-full h-[70vh] bg-gray-100 rounded-lg overflow-hidden relative">
+    <div className="w-full h-[70vh] bg-gray-100 rounded-lg overflow-hidden relative" dir="ltr">
       {isLoading && (
         <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
           <div className="flex flex-col items-center">
             <p className="mt-2 text-gray-700">
-              {lang === 'en' ? 'Loading map...' : 'Chargement de la carte...'}
+              Chargement de la carte...
             </p>
           </div>
         </div>
@@ -122,16 +122,14 @@ const MapComponent: React.FC<MapComponentProps> = ({ lang }) => {
       <div ref={mapRef} className="w-full h-full" />
       
       {userLocation && (
-        <div className="absolute bottom-4 left-4 right-4 bg-white p-4 rounded-lg shadow-md max-w-sm">
+        <div className="absolute bottom-4 left-4 right-4 bg-white p-4 rounded-lg shadow-md max-w-sm" dir="ltr">
           <div className="flex items-center">
             <h3 className="font-semibold text-gray-900">
-              {lang === 'en' ? 'Distance to Easy-ride' : 'Distance à Easy-ride'}
+              Distance à Easy-ride
             </h3>
           </div>
           <p className="text-gray-700 mt-1">
-            {lang === 'en' 
-              ? `You are approximately ${distance} km away from our store.`
-              : `Vous êtes à environ ${distance} km de notre magasin.`}
+            Vous êtes à environ {distance} km de notre magasin.
           </p>
         </div>
       )}

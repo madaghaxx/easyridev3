@@ -1,19 +1,19 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-type User = {
+type Utilisateur = {
   id: string;
-  name: string;
+  nom: string;
   email: string;
   age?: number;
-  phone?: string;
+  telephone?: string;
 };
 
 interface AuthContextType {
-  isLoggedIn: boolean;
-  user: User | null;
-  login: (email: string, password: string) => Promise<boolean>;
-  register: (userData: Omit<User, 'id'> & { password: string }) => Promise<boolean>;
-  logout: () => void;
+  estConnecte: boolean;
+  utilisateur: Utilisateur | null;
+  connexion: (email: string, motDePasse: string) => Promise<boolean>;
+  inscription: (donnees: Omit<Utilisateur, 'id'> & { motDePasse: string }) => Promise<boolean>;
+  deconnexion: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -21,90 +21,116 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error('useAuth doit être utilisé dans AuthProvider');
   }
-  return context;
+  return {
+    isLoggedIn: context.estConnecte,
+    user: context.utilisateur,
+    logout: context.deconnexion,
+    // Optionally expose the originals if needed elsewhere
+    ...context,
+  };
 };
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-  const [user, setUser] = useState<User | null>(null);
+  const [estConnecte, setEstConnecte] = useState<boolean>(false);
+  const [utilisateur, setUtilisateur] = useState<Utilisateur | null>(null);
 
+  // Restore user from localStorage on mount
   useEffect(() => {
-    // Check local storage for user session
     const storedUser = localStorage.getItem('t-glide-user');
     if (storedUser) {
-      setUser(JSON.parse(storedUser));
-      setIsLoggedIn(true);
+      setUtilisateur(JSON.parse(storedUser));
+      setEstConnecte(true);
     }
   }, []);
 
-  const login = async (email: string, password: string): Promise<boolean> => {
+  const hacherMotDePasse = async (motDePasse: string): Promise<string> => {
+    // Hachage simple pour démonstration (NE PAS utiliser en production)
+    const encoder = new TextEncoder();
+    const data = encoder.encode(motDePasse);
+    const hashBuffer = await window.crypto.subtle.digest('SHA-256', data);
+    return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+  };
+
+  const validerEmail = (email: string): boolean => {
+    // Validation simple d'email
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
+
+  const connexion = async (email: string, motDePasse: string): Promise<boolean> => {
     try {
-      // For demo purpose, we're using mock authentication
-      // In a real app, you would call your API here
-      
-      // Simulate API call
+      if (!validerEmail(email) || motDePasse.length < 6) {
+        return false;
+      }
+
+      // Simulation d'appel API
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Hard-coded user for demo
-      if (email === 'demo@example.com' && password === 'password') {
-        const mockUser: User = {
+
+      // Utilisateur de démonstration
+      const emailDemo = 'demo@example.com';
+      const motDePasseDemoHash = await hacherMotDePasse('password');
+
+      const motDePasseSaisiHash = await hacherMotDePasse(motDePasse);
+
+      if (email === emailDemo && motDePasseSaisiHash === motDePasseDemoHash) {
+        const utilisateurFictif: Utilisateur = {
           id: 'user-1',
-          name: 'Demo User',
-          email: 'demo@example.com',
-          age: 28,
-          phone: '+212612345678'
+          nom: 'Démo',
+          email: emailDemo,
         };
-        
-        setUser(mockUser);
-        setIsLoggedIn(true);
-        localStorage.setItem('t-glide-user', JSON.stringify(mockUser));
+        setUtilisateur(utilisateurFictif);
+        setEstConnecte(true);
+        localStorage.setItem('t-glide-user', JSON.stringify(utilisateurFictif));
         return true;
       }
-      
       return false;
     } catch (error) {
-      console.error('Login error:', error);
+      console.error('Erreur de connexion :', error);
       return false;
     }
   };
 
-  const register = async (userData: Omit<User, 'id'> & { password: string }): Promise<boolean> => {
+  const inscription = async (donnees: Omit<Utilisateur, 'id'> & { motDePasse: string }): Promise<boolean> => {
     try {
-      // For demo purpose, we're using mock registration
-      // In a real app, you would call your API here
-      
-      // Simulate API call
+      const { motDePasse, email, ...infosUtilisateur } = donnees;
+
+      if (!validerEmail(email) || motDePasse.length < 6) {
+        return false;
+      }
+
+      // Simulation d'appel API
       await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      const { password, ...userInfo } = userData;
-      
-      // Create mock user
-      const mockUser: User = {
+
+      // Hachage du mot de passe (non stocké dans cette démo)
+      await hacherMotDePasse(motDePasse);
+
+      // Création d'un utilisateur fictif
+      const utilisateurFictif: Utilisateur = {
         id: `user-${Date.now()}`,
-        ...userInfo
+        email,
+        ...infosUtilisateur
       };
-      
-      setUser(mockUser);
-      setIsLoggedIn(true);
-      localStorage.setItem('t-glide-user', JSON.stringify(mockUser));
-      
+
+      setUtilisateur(utilisateurFictif);
+      setEstConnecte(true);
+      localStorage.setItem('t-glide-user', JSON.stringify(utilisateurFictif));
+
       return true;
     } catch (error) {
-      console.error('Registration error:', error);
+      console.error('Erreur d\'inscription :', error);
       return false;
     }
   };
 
-  const logout = () => {
-    setUser(null);
-    setIsLoggedIn(false);
+  const deconnexion = () => {
+    setUtilisateur(null);
+    setEstConnecte(false);
     localStorage.removeItem('t-glide-user');
   };
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, user, login, register, logout }}>
+    <AuthContext.Provider value={{ estConnecte, utilisateur, connexion, inscription, deconnexion }}>
       {children}
     </AuthContext.Provider>
   );

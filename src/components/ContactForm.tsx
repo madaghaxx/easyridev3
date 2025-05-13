@@ -3,11 +3,13 @@ import Input from './ui/Input';
 import Button from './ui/Button';
 
 interface ContactFormProps {
-  lang: 'fr';
+  lang: string; // Accept any language code
 }
 
 const ContactForm: React.FC<ContactFormProps> = ({ lang }) => {
-  const isRtl = lang === 'fr';
+  // Set RTL only for actual RTL languages
+  const rtlLanguages = ['ar', 'he', 'fa', 'ur'];
+  const isRtl = rtlLanguages.includes(lang);
   const [formState, setFormState] = useState({
     name: '',
     email: '',

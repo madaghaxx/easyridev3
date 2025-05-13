@@ -1,10 +1,10 @@
 import React from 'react';
 import ContactForm from '../components/ContactForm';
-import { useLang } from '../contexts/LangContext';
 
 const ContactPage: React.FC = () => {
-	const { lang, t } = useLang();
-	const isRtl = lang === 'fr';
+	// Only French, so no lang/t hook needed
+	const t = (s: string) => s;
+	const isRtl = false;
 
 	return (
 		<div
@@ -15,13 +15,10 @@ const ContactPage: React.FC = () => {
 				<div className="max-w-4xl mx-auto">
 					<div className="text-center mb-12">
 						<h1 className="text-3xl font-bold mb-4">
-							{t('Contactez-nous')}
+							Contactez-nous
 						</h1>
 						<p className="text-gray-600">
-							{t(
-
-								'Vous avez des questions ou besoin d\'aide? Nous sommes là pour vous aider!'
-							)}
+							Vous avez des questions ou besoin d'aide? Nous sommes là pour vous aider!
 						</p>
 					</div>
 
@@ -29,56 +26,44 @@ const ContactPage: React.FC = () => {
 						<div className="md:flex">
 							<div className="md:w-1/3 bg-green-500 text-white p-6">
 								<h2 className="text-xl font-bold mb-6">
-									{t('Informations de contact')}
+									Informations de contact
 								</h2>
 
 								<div className="space-y-4">
 									<div className="flex items-start">
 										<div>
-											<h3 className="font-medium">{t('Adresse')}</h3>
+											<h3 className="font-medium">Adresse</h3>
 											<p className="mt-1">
-												{t(
-
-													'Centre-ville d\'Oujda, Maroc'
-												)}
+												Centre-ville d'Oujda, Maroc
 											</p>
 										</div>
 									</div>
 
 									<div className="flex items-start">
 										<div>
-											<h3 className="font-medium">{t('Téléphone')}</h3>
+											<h3 className="font-medium">Téléphone</h3>
 											<p className="mt-1">+212 612 345 678</p>
 										</div>
 									</div>
 
 									<div className="flex items-start">
 										<div>
-											<h3 className="font-medium">{t('Email')}</h3>
+											<h3 className="font-medium">Email</h3>
 											<p className="mt-1">info@t-glide.ma</p>
 										</div>
 									</div>
 
 									<div className="flex items-start">
 										<div>
-											<h3 className="font-medium">{t('Heures d\'ouverture')}</h3>
+											<h3 className="font-medium">Heures d'ouverture</h3>
 											<p className="mt-1">
-												{t(
-
-													'Lundi - Vendredi: 9:00 - 18:00'
-												)}
+												Lundi - Vendredi: 9:00 - 18:00
 											</p>
 											<p>
-												{t(
-
-													'Samedi: 10:00 - 16:00'
-												)}
+												Samedi: 10:00 - 16:00
 											</p>
 											<p>
-												{t(
-
-													'Dimanche: Fermé'
-												)}
+												Dimanche: Fermé
 											</p>
 										</div>
 									</div>
@@ -86,7 +71,7 @@ const ContactPage: React.FC = () => {
 
 								<div className="mt-8">
 									<h3 className="font-medium mb-2">
-										{t('Suivez-nous')}
+										Suivez-nous
 									</h3>
 									<div className="flex space-x-4">
 										<a href="#" className="text-white hover:text-gray-200 transition-colors">
@@ -110,10 +95,10 @@ const ContactPage: React.FC = () => {
 
 							<div className="md:w-2/3 p-6">
 								<h2 className="text-xl font-bold mb-6">
-									{t('Envoyez-nous un message')}
+									Envoyez-nous un message
 								</h2>
 
-								<ContactForm lang={lang} />
+								<ContactForm lang="fr" />
 							</div>
 						</div>
 					</div>
@@ -121,51 +106,43 @@ const ContactPage: React.FC = () => {
 					<div className="mt-12 bg-white rounded-lg shadow-md overflow-hidden">
 						<div className="p-6">
 							<h2 className="text-xl font-bold mb-4">
-								{t('Questions fréquentes')}
+								Questions fréquentes
 							</h2>
 
 							<div className="space-y-4">
 								<div>
 									<h3 className="font-medium text-lg">
-										{t('Comment louer un scooter?')}
+										Comment louer un scooter?
 									</h3>
 									<p className="text-gray-600 mt-1">
-										{t(
-											'Pour louer un scooter, vous devez créer un compte, sélectionner votre période de location et remplir le formulaire de réservation. Vous pouvez récupérer votre scooter dans l\'un de nos emplacements.'
-										)}
+										Pour louer un scooter, vous devez créer un compte, sélectionner votre période de location et remplir le formulaire de réservation. Vous pouvez récupérer votre scooter dans l'un de nos emplacements.
 									</p>
 								</div>
 
 								<div>
 									<h3 className="font-medium text-lg">
-										{t('Quel est le dépôt de garantie?')}
+										Quel est le dépôt de garantie?
 									</h3>
 									<p className="text-gray-600 mt-1">
-										{t(
-											'Nous demandons un dépôt de garantie de 500 MAD pour toutes les locations. Celui-ci sera remboursé lorsque vous rendrez le scooter en bon état.'
-										)}
+										Nous demandons un dépôt de garantie de 500 MAD pour toutes les locations. Celui-ci sera remboursé lorsque vous rendrez le scooter en bon état.
 									</p>
 								</div>
 
 								<div>
 									<h3 className="font-medium text-lg">
-										{t('Proposez-vous la livraison?')}
+										Proposez-vous la livraison?
 									</h3>
 									<p className="text-gray-600 mt-1">
-										{t(
-											'Oui, nous proposons la livraison et le ramassage gratuits dans toute la ville d\'Oujda pour les locations de plus de 4 heures.'
-										)}
+										Oui, nous proposons la livraison et le ramassage gratuits dans toute la ville d'Oujda pour les locations de plus de 4 heures.
 									</p>
 								</div>
 
 								<div>
 									<h3 className="font-medium text-lg">
-										{t( 'Quelle garantie offrez-vous avec les scooters achetés?')}
+										Quelle garantie offrez-vous avec les scooters achetés?
 									</h3>
 									<p className="text-gray-600 mt-1">
-										{t(
-											'Nos scooters Model A sont accompagnés d\'une garantie d\'un an, tandis que les scooters Model B incluent une garantie de deux ans, couvrant les défauts de fabrication et les problèmes de batterie.'
-										)}
+										Nos scooters Model A sont accompagnés d'une garantie d'un an, tandis que les scooters Model B incluent une garantie de deux ans, couvrant les défauts de fabrication et les problèmes de batterie.
 									</p>
 								</div>
 							</div>

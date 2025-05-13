@@ -12,7 +12,6 @@ interface ScooterProps {
   price: number;
   image: string;
   actionType: 'rent';
-  lang: 'en';
 }
 
 const ScooterCard: React.FC<ScooterProps> = ({
@@ -24,7 +23,6 @@ const ScooterCard: React.FC<ScooterProps> = ({
   image,
   actionType,
 }) => {
-
   return (
     <Card className="h-full flex flex-col">
       <CardHeader className="pb-0">
@@ -41,11 +39,11 @@ const ScooterCard: React.FC<ScooterProps> = ({
       <CardContent className="flex-grow">
         <div className="space-y-2">
           <div className="flex justify-between items-center">
-            <span className="text-gray-600">{'Speed'}</span>
+            <span className="text-gray-600">{'Vitesse'}</span>
             <span className="font-medium">{speed} km/h</span>
           </div>
           <div className="flex justify-between items-center">
-            <span className="text-gray-600">{'Price'}</span>
+            <span className="text-gray-600">{'Prix'}</span>
             <span className="font-bold text-green-600">{formatPrice(price)}</span>
           </div>
         </div>
@@ -54,9 +52,7 @@ const ScooterCard: React.FC<ScooterProps> = ({
         <Link to={`/${actionType}/${id}`} className="w-full">
           <Button variant="primary" className="w-full">
             <span>
-              {
-
-                ('Rent Now')}
+              {'Louer maintenant'}
             </span>
           </Button>
         </Link>

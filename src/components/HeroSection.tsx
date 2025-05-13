@@ -1,3 +1,4 @@
+// HeroSection is a React functional component that displays a hero banner with a background image, title, description, action buttons, and a scroll indicator.
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Button from './ui/Button';
