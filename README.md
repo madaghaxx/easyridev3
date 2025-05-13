@@ -1,1 +1,1 @@
-dir <npm install> moraha <npm run dev>
+dir \<npm install\> moraha \<npm run dev\>
