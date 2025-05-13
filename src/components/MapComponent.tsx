@@ -12,7 +12,6 @@ const MapComponent: React.FC<MapComponentProps> = ({ lang }) => {
   const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
 
   useEffect(() => {
-    // Load Leaflet dynamically
     const loadLeaflet = async () => {
       const L = await import('leaflet');
       

@@ -165,23 +165,6 @@ const RentPage: React.FC = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Scooter
-                        </label>
-                        <select
-                          name="scooterId"
-                          value={formData.scooterId}
-                          onChange={handleChange}
-                          className={`w-full border rounded px-3 py-2 ${errors.scooterId ? 'border-red-500' : 'border-gray-300'}`}
-                        >
-                          <option value="">Sélectionnez un scooter</option>
-                          <option value="scooter1">Scooter 1</option>
-                          <option value="scooter2">Scooter 2</option>
-                          <option value="scooter3">Scooter 3</option>
-                        </select>
-                        {errors.scooterId && <p className="text-red-500 text-xs mt-1">{errors.scooterId}</p>}
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
                           Lieu de ramassage
                         </label>
                         <Input
@@ -228,18 +211,6 @@ const RentPage: React.FC = () => {
                           value={formData.returnDate}
                           onChange={handleChange}
                           error={errors.returnDate}
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Heure de retour
-                        </label>
-                        <Input
-                          type="time"
-                          name="returnTime"
-                          value={formData.returnTime}
-                          onChange={handleChange}
-                          error={errors.returnTime}
                         />
                       </div>
                       <div className="flex items-center mt-2">
