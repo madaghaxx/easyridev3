@@ -136,15 +136,6 @@ const ContactPage: React.FC = () => {
 										Oui, nous proposons la livraison et le ramassage gratuits dans toute la ville d'Oujda pour les locations de plus de 4 heures.
 									</p>
 								</div>
-
-								<div>
-									<h3 className="font-medium text-lg">
-										Quelle garantie offrez-vous avec les scooters achetés?
-									</h3>
-									<p className="text-gray-600 mt-1">
-										Nos scooters Model A sont accompagnés d'une garantie d'un an, tandis que les scooters Model B incluent une garantie de deux ans, couvrant les défauts de fabrication et les problèmes de batterie.
-									</p>
-								</div>
 							</div>
 						</div>
 					</div>

@@ -12,75 +12,63 @@ interface PricingTier {
 
 const standardTiers: PricingTier[] = [
   {
-    id: 'standard-30min',
-    name: '30 minutes',
-    duration: 'Durée minimale de location',
-    price: 20,
-  },
-  {
-    id: 'standard-1hour',
-    name: '1 heure',
-    duration: 'Court',
-    price: 30,
-  },
-  {
     id: 'standard-4-8hours',
     name: '4-8 heures',
     duration: 'Entre 4 et 8 heures',
-    price: 100,
-    isPopular: true,
+    price: 70,
   },
   {
     id: 'standard-8-12hours',
     name: '8-12 heures',
     duration: 'Entre 8 et 12 heures',
-    price: 130,
+    price: 100,
   },
   {
     id: 'standard-24hours',
     name: '24 heures',
     duration: 'Journée complète',
-    price: 160,
+    price: 130,
+    isPopular: true,
   },
   {
     id: 'standard-weekly',
     name: 'Location hebdomadaire',
     duration: '7 jours',
-    price: 600,
+    price: 450,
   },
   {
     id: 'standard-monthly',
     name: 'Location mensuelle',
     duration: '30 jours',
-    price: 1400,
+    price: 1200,
   },
 ];
 
 const performanceTiers: PricingTier[] = [
   {
-    id: 'performance-8-12hours',
-    name: '8-12 heures',
+    id: 'performance-30min',
+    name: '30 minutes',
     duration: 'Haute performance',
-    price: 100,
+    price: 30, // was 100, now from standard-30min (20)
   },
   {
-    id: 'performance-24hours',
-    name: '24 heures',
+    id: 'performance-1hours',
+    name: '1 heures',
     duration: 'Haute performance',
-    price: 130,
+    price: 50, // was 130, now from standard-1hour (30)
+  },
+  {
+    id: 'performance-daily',
+    name: '24hours',
+    duration: 'Haute performance',
+    price: 200, // was 450, now from standard-4-8hours (100)
+    isPopular: true,
   },
   {
     id: 'performance-weekly',
     name: '7 jours',
     duration: 'Haute performance',
-    price: 450,
-    isPopular: true,
-  },
-  {
-    id: 'performance-monthly',
-    name: '30 jours',
-    duration: 'Haute performance',
-    price: 1200,
+    price: 1000, // was 1200, now from standard-8-12hours (130)
   },
 ];
 
@@ -186,8 +174,8 @@ const RentalPricing: React.FC = () => {
       <h2 className="text-2xl font-bold text-center mb-8">
         Tarification de location
       </h2>
-      {renderTiers(standardTiers, 'Standard')}
       {renderTiers(performanceTiers, 'Performance')}
+      {renderTiers(standardTiers, 'Standard')}
       <div className="mt-8 bg-green-50 p-6 rounded-lg">
         <h3 className="text-lg font-bold text-green-800 mb-2">
           Réduction étudiante

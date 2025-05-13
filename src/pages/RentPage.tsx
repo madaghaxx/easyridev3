@@ -1,19 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Input from '../components/ui/Input';
 import Button from '../components/ui/Button';
 import RentalPricing from '../components/RentalPricing';
-import ScooterCard from '../components/ScooterCard'; // Import ScooterCard for displaying scooters
 import { useAuth } from '../contexts/AuthContext';
 
 const RentPage: React.FC = () => {
   const { user } = useAuth();
   const isRtl = false;
 
-  // Redirect to login if not authenticated
   const [formData, setFormData] = useState({
     fullName: user?.nom || '',
     age: user?.age?.toString() || '',
-    scooterId: '', // Add scooterId for selected scooter
+    scooterId: '',
     rentalDate: '',
     rentalTime: '',
     returnDate: '',
@@ -26,22 +24,6 @@ const RentPage: React.FC = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  const [scooters, setScooters] = useState<any[]>([]); // State to store available scooters
-
-  // Fetch available scooters
-  useEffect(() => {
-    const fetchScooters = async () => {
-      try {
-        const response = await fetch('/api/scooters'); // Replace with your API endpoint
-        const data = await response.json();
-        setScooters(data);
-      } catch (error) {
-        console.error('Failed to fetch scooters:', error);
-      }
-    };
-
-    fetchScooters();
-  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target as HTMLInputElement;
@@ -50,7 +32,6 @@ const RentPage: React.FC = () => {
       [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value,
     }));
 
-    // Clear error when user types
     if (errors[name]) {
       setErrors(prev => {
         const newErrors = { ...prev };
@@ -60,43 +41,36 @@ const RentPage: React.FC = () => {
     }
   };
 
+
   const validate = (): boolean => {
     const newErrors: Record<string, string> = {};
 
     if (!formData.fullName.trim()) {
       newErrors.fullName = 'Le nom complet est requis';
     }
-
     if (!formData.age.trim()) {
       newErrors.age = "L'âge est requis";
     } else if (isNaN(Number(formData.age)) || Number(formData.age) < 16) {
       newErrors.age = 'Vous devez avoir au moins 16 ans';
     }
-
     if (!formData.scooterId.trim()) {
       newErrors.scooterId = 'Veuillez sélectionner un scooter';
     }
-
     if (!formData.rentalDate.trim()) {
       newErrors.rentalDate = 'La date de location est requise';
     }
-
     if (!formData.rentalTime.trim()) {
       newErrors.rentalTime = "L'heure de location est requise";
     }
-
     if (!formData.returnDate.trim()) {
       newErrors.returnDate = 'La date de retour est requise';
     }
-
     if (!formData.returnTime.trim()) {
       newErrors.returnTime = "L'heure de retour est requise";
     }
-
     if (!formData.location.trim()) {
       newErrors.location = 'Le lieu de ramassage est requis';
     }
-
     if (formData.isDelivery && !formData.deliveryAddress.trim()) {
       newErrors.deliveryAddress = "L'adresse de livraison est requise";
     }
@@ -107,17 +81,11 @@ const RentPage: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
     if (!validate()) return;
-
     setIsSubmitting(true);
-
-    // Simulate API call
     setTimeout(() => {
       setIsSubmitting(false);
       setIsSuccess(true);
-
-      // Reset form after success
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }, 1500);
   };
@@ -130,11 +98,17 @@ const RentPage: React.FC = () => {
         <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md overflow-hidden">
           {isSuccess ? (
             <div className="p-8 text-center">
+              <div className="flex justify-center mb-4">
+                <svg className="w-16 h-16 text-green-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
               <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                Réservation confirmée!
+                Réservation confirmée !
               </h2>
               <p className="text-gray-600 mb-6">
-                Votre location de scooter a été réservée avec succès.
+                Votre location de scooter a été réservée avec succès.<br />
+                Un email de confirmation vous a été envoyé.
               </p>
               <Button variant="primary" onClick={() => (window.location.href = '/')}>
                 Retour à l'accueil
@@ -150,24 +124,6 @@ const RentPage: React.FC = () => {
               <div className="p-6">
                 <div className="mb-8">
                   <RentalPricing />
-                </div>
-
-                <div className="mb-8">
-                  <h3 className="font-bold text-lg mb-4">Scooters disponibles</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {scooters.map(scooter => (
-                      <div
-                        key={scooter.id}
-                        className={`border rounded-md p-4 cursor-pointer ${
-                          formData.scooterId === scooter.id ? 'border-green-500' : 'border-gray-300'
-                        }`}
-                        onClick={() => setFormData(prev => ({ ...prev, scooterId: scooter.id }))}
-                      >
-                        <ScooterCard {...scooter} actionType="rent" />
-                      </div>
-                    ))}
-                  </div>
-                  {errors.scooterId && <p className="text-sm text-red-500 mt-1">{errors.scooterId}</p>}
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
@@ -209,6 +165,35 @@ const RentPage: React.FC = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Scooter
+                        </label>
+                        <select
+                          name="scooterId"
+                          value={formData.scooterId}
+                          onChange={handleChange}
+                          className={`w-full border rounded px-3 py-2 ${errors.scooterId ? 'border-red-500' : 'border-gray-300'}`}
+                        >
+                          <option value="">Sélectionnez un scooter</option>
+                          <option value="scooter1">Scooter 1</option>
+                          <option value="scooter2">Scooter 2</option>
+                          <option value="scooter3">Scooter 3</option>
+                        </select>
+                        {errors.scooterId && <p className="text-red-500 text-xs mt-1">{errors.scooterId}</p>}
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Lieu de ramassage
+                        </label>
+                        <Input
+                          type="text"
+                          name="location"
+                          value={formData.location}
+                          onChange={handleChange}
+                          error={errors.location}
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
                           Date de location
                         </label>
                         <Input
@@ -232,6 +217,58 @@ const RentPage: React.FC = () => {
                           error={errors.rentalTime}
                         />
                       </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Date de retour
+                        </label>
+                        <Input
+                          type="date"
+                          name="returnDate"
+                          min={formData.rentalDate || today}
+                          value={formData.returnDate}
+                          onChange={handleChange}
+                          error={errors.returnDate}
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Heure de retour
+                        </label>
+                        <Input
+                          type="time"
+                          name="returnTime"
+                          value={formData.returnTime}
+                          onChange={handleChange}
+                          error={errors.returnTime}
+                        />
+                      </div>
+                      <div className="flex items-center mt-2">
+                        <input
+                          type="checkbox"
+                          name="isDelivery"
+                          id="isDelivery"
+                          checked={formData.isDelivery}
+                          onChange={handleChange}
+                          className="mr-2"
+                        />
+                        <label htmlFor="isDelivery" className="text-sm font-medium text-gray-700">
+                          Livraison à domicile ?
+                        </label>
+                      </div>
+                      {formData.isDelivery && (
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Adresse de livraison
+                          </label>
+                          <Input
+                            type="text"
+                            name="deliveryAddress"
+                            value={formData.deliveryAddress}
+                            onChange={handleChange}
+                            error={errors.deliveryAddress}
+                          />
+                        </div>
+                      )}
                     </div>
                   </div>
 
